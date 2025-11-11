@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Suivi Accompagnement Candidats</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- CSS personnalisé -->
+    <link href="style.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="#"><i class="fas fa-users-cog"></i> Suivi Candidats</a>
+            <div class="navbar-nav ms-auto">
+                <button class="btn btn-outline-light" id="showDashboard">
+                    <i class="fas fa-tachometer-alt"></i> Tableau de bord
+                </button>
+                <button class="btn btn-outline-light ms-2" id="showAddForm">
+                    <i class="fas fa-plus"></i> Ajouter candidat
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <!-- Section Tableau de bord -->
+        <div id="dashboardSection">
+            <div class="row mb-4">
+                <div class="col-12">
+                    <h2><i class="fas fa-chart-line"></i> Tableau de bord</h2>
+                    <div class="row" id="statsCards">
+                        <div class="col-md-3 mb-3">
+                            <div class="card bg-primary text-white">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between">
+                                        <div>
+                                            <h4 id="totalCandidats">0</h4>
+                                            <span>Total candidats</span>
+                                        </div>
+                                        <i class="fas fa-users fa-2x"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="card bg-success text-white">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between">
+                                        <div>
+                                            <h4 id="candidatsEmb">0</h4>
+                                            <span>Embauchés</span>
+                                        </div>
+                                        <i class="fas fa-check-circle fa-2x"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="card bg-warning text-white">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between">
+                                        <div>
+                                            <h4 id="candidatsEntretien">0</h4>
+                                            <span>En entretien</span>
+                                        </div>
+                                        <i class="fas fa-handshake fa-2x"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="card bg-info text-white">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between">
+                                        <div>
+                                            <h4 id="candidatsCours">0</h4>
+                                            <span>En cours</span>
+                                        </div>
+                                        <i class="fas fa-clock fa-2x"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Liste des candidats -->
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0"><i class="fas fa-list"></i> Liste des candidats</h5>
+                    <input type="text" class="form-control w-25" id="searchInput" placeholder="Rechercher...">
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Nom</th>
+                                    <th>Type de contrat</th>
+                                    <th>Statut</th>
+                                    <th>Date début</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="candidatsTableBody">
+                                <!-- Les candidats seront affichés ici -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <div id="noCandidats" class="text-center p-4" style="display: none;">
+                        <i class="fas fa-user-plus fa-3x text-muted mb-3"></i>
+                        <h5 class="text-muted">Aucun candidat ajouté</h5>
+                        <p class="text-muted">Commencez par ajouter votre premier candidat</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section Ajout de candidat -->
+        <div id="addCandidateSection" style="display: none;">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-user-plus"></i> Ajouter un nouveau candidat</h5>
+                </div>
+                <div class="card-body">
+                    <form id="candidateForm">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="nom" class="form-label">Nom *</label>
+                                <input type="text" class="form-control" id="nom" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="prenom" class="form-label">Prénom *</label>
+                                <input type="text" class="form-control" id="prenom" required>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="email" class="form-label">Email *</label>
+                                <input type="email" class="form-control" id="email" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="telephone" class="form-label">Téléphone</label>
+                                <input type="tel" class="form-control" id="telephone">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="typeContrat" class="form-label">Type de contrat recherché *</label>
+                                <select class="form-control" id="typeContrat" required>
+                                    <option value="">Sélectionner...</option>
+                                    <option value="CDI">CDI</option>
+                                    <option value="CDD">CDD</option>
+                                    <option value="Stage">Stage</option>
+                                    <option value="Alternance">Alternance</option>
+                                    <option value="Freelance">Freelance / Portage</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="dateDebut" class="form-label">Date de début d'accompagnement *</label>
+                                <input type="date" class="form-control" id="dateDebut" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="objectifPro" class="form-label">Objectif professionnel</label>
+                            <textarea class="form-control" id="objectifPro" rows="3" placeholder="Ex: Développeur Full-Stack, Chef de projet digital..."></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="lienCV" class="form-label">Lien vers le CV</label>
+                            <input type="url" class="form-control" id="lienCV" placeholder="https://...">
+                        </div>
+                        <div class="text-end">
+                            <button type="button" class="btn btn-secondary me-2" id="cancelAdd">Annuler</button>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i> Ajouter le candidat
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Section d'aide pour l'import CSV -->
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h6 class="mb-0"><i class="fas fa-info-circle"></i> Import de candidats depuis Google Sheets (CSV)</h6>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6>Format CSV Google Sheets détecté :</h6>
+                            <p class="small mb-2">Votre formulaire contient 15 colonnes qui seront automatiquement mappées :</p>
+                            <ol class="small">
+                                <li><strong>Horodateur</strong> → Date de début</li>
+                                <li><strong>Nom d'utilisateur</strong> → Ignoré</li>
+                                <li><strong>Nom & Prénom</strong> → Séparé automatiquement</li>
+                                <li><strong>Email</strong> → Email du candidat</li>
+                                <li><strong>Téléphone</strong> → Numéro de contact</li>
+                                <li><strong>Ville + mobilité</strong> → Localisation</li>
+                                <li><strong>Type de contrat</strong> → CDI/CDD/Stage/Alternance/Freelance</li>
+                                <li><strong>Stack & expérience</strong> → Objectif professionnel enrichi</li>
+                                <li><strong>Lien CV/LinkedIn</strong> → Portfolio</li>
+                            </ol>
+                        </div>
+                        <div class="col-md-6">
+                            <h6>Traitement automatique :</h6>
+                            <ul class="small">
+                                <li>✅ <strong>Séparation nom/prénom</strong> automatique</li>
+                                <li>✅ <strong>Normalisation téléphone</strong> (format français)</li>
+                                <li>✅ <strong>Type de contrat</strong> reconnu intelligemment</li>
+                                <li>✅ <strong>Objectif enrichi</strong> (stack + niveau + souhaits)</li>
+                                <li>✅ <strong>Date d'horodateur</strong> → date de début</li>
+                                <li>✅ <strong>Déduplication</strong> par email</li>
+                                <li>✅ <strong>Validation complète</strong> des données</li>
+                            </ul>
+                            <div class="mt-3">
+                                <p class="small"><strong>Export depuis Google Sheets :</strong></p>
+                                <ol class="small">
+                                    <li>Fichier → Télécharger → CSV</li>
+                                    <li>Cliquer "Importer" ci-dessus</li>
+                                    <li>Choisir : ajouter ou remplacer</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section Fiche candidat -->
+        <div id="candidateDetailSection" style="display: none;">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0"><i class="fas fa-user"></i> Fiche candidat</h5>
+                    <div>
+                        <button class="btn btn-danger btn-sm" id="deleteCandidate">
+                            <i class="fas fa-trash"></i> Supprimer
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <!-- Informations personnelles -->
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <h6 class="border-bottom pb-2">Informations personnelles</h6>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Nom :</strong> <span id="detailNom"></span></p>
+                            <p><strong>Prénom :</strong> <span id="detailPrenom"></span></p>
+                            <p><strong>Email :</strong> <span id="detailEmail"></span></p>
+                            <p><strong>Téléphone :</strong> <span id="detailTelephone"></span></p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Type de contrat :</strong> <span id="detailTypeContrat"></span></p>
+                            <p><strong>Date début :</strong> <span id="detailDateDebut"></span></p>
+                            <p><strong>Objectif :</strong> <span id="detailObjectif"></span></p>
+                            <p><strong>CV :</strong> <a href="#" id="detailCV" target="_blank">Voir le CV</a></p>
+                        </div>
+                    </div>
+
+                    <!-- Étapes d'accompagnement -->
+                    <form id="detailForm">
+                        <div class="row">
+                            <div class="col-12 mb-3">
+                                <h6 class="border-bottom pb-2">Étapes d'accompagnement</h6>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-check mb-2">
+                                            <input class="form-check-input" type="checkbox" id="appelDecouverte">
+                                            <label class="form-check-label" for="appelDecouverte">
+                                                Appel de découverte
+                                            </label>
+                                        </div>
+                                        <div class="form-check mb-2">
+                                            <input class="form-check-input" type="checkbox" id="optimisationCV">
+                                            <label class="form-check-label" for="optimisationCV">
+                                                Optimisation du CV
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-check mb-2">
+                                            <input class="form-check-input" type="checkbox" id="optimisationLinkedIn">
+                                            <label class="form-check-label" for="optimisationLinkedIn">
+                                                Optimisation LinkedIn
+                                            </label>
+                                        </div>
+                                        <div class="form-check mb-2">
+                                            <input class="form-check-input" type="checkbox" id="preparationEntretiens">
+                                            <label class="form-check-label" for="preparationEntretiens">
+                                                Préparation aux entretiens
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="nbCandidatures" class="form-label">Nombre de candidatures envoyées</label>
+                                <input type="number" class="form-control" id="nbCandidatures" min="0">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="statutActuel" class="form-label">Statut actuel</label>
+                                <select class="form-control" id="statutActuel">
+                                    <option value="en cours">En cours</option>
+                                    <option value="en entretien">En entretien</option>
+                                    <option value="embauché">Embauché</option>
+                                    <option value="en pause">En pause</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="entreprisesCiblees" class="form-label">Entreprises ciblées</label>
+                            <textarea class="form-control" id="entreprisesCiblees" rows="3" placeholder="Listez les entreprises ciblées, séparées par des virgules"></textarea>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="entretiensPass" class="form-label">Entretiens passés</label>
+                            <textarea class="form-control" id="entretiensPass" rows="3" placeholder="Détaillez les entretiens passés (entreprise, poste, date, résultat...)"></textarea>
+                        </div>
+
+                        <div class="text-end">
+                            <button type="button" class="btn btn-secondary me-2" id="backToDashboard">
+                                <i class="fas fa-arrow-left"></i> Retour
+                            </button>
+                            <button type="submit" class="btn btn-success">
+                                <i class="fas fa-save"></i> Sauvegarder les modifications
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- JavaScript personnalisé -->
+    <script src="app.js"></script>
+</body>
+</html>
